@@ -19,8 +19,8 @@ Do not ask about AIC creation. Do not ask for anything else upfront.
 
 ## Execution rules
 
-- Collect all inputs in a **single upfront prompt**. Do not ask for anything mid-workflow.
-- After inputs are confirmed, **run all steps to completion without pausing or asking for confirmation**.
+- **Step 1 and step 2 are interactive** — they require showing results and asking for user input. Do not skip these interactions.
+- **Steps 3 and 4 run automatically** — after all scopes are confirmed, execute to completion without pausing or asking for confirmation.
 - If a required MCP tool is unavailable, **stop immediately and report the error clearly** — do not skip or work around it.
 
 ## Workflow
@@ -64,7 +64,7 @@ If `create_in_aic = true`, call `create_agent` on the `aic-agent-manager` MCP:
 
 - `agentId`: `<agent_id>`
 - `agentMode`: `obo` (hardcoded — token-exchange grant only)
-- `agentScopes`: full list of scopes collected in step 2
+- `agentScopes`: **only the scopes the user selected in step 2** — not the full list returned by `get_mcp_scopes`. If the user chose full access, pass all scopes; if the user chose individual tools, pass only the selected ones.
 
 The response will include the generated client secret. **Display it clearly and immediately** — it will not be retrievable again. Instruct the user to store it securely.
 
