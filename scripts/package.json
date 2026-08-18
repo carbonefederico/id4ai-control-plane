@@ -1,0 +1,12 @@
+{
+  "name": "id4ai-scripts",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "get-token": "node --env-file-if-exists=.env get-aic-token.js",
+    "create-agent": "node --env-file-if-exists=.env create-agent.js"
+  },
+  "dependencies": {
+    "jose": "^5.0.0"
+  }
+}

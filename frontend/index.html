@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ID4AI Control Plane — Agentic Access</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">ID4AI</div>
+        <div><div class="brand-name">ID4AI Control Plane</div><div class="brand-sub">Agentic access fabric</div></div>
+      </div>
+      <div class="env-pill"><span>Environment</span><span class="env-value"><i class="dot"></i>Production</span></div>
+      <div class="nav-label">Operate</div>
+      <nav class="nav">
+        <button type="button" class="nav-item active" data-page="dashboard">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+          <span>Dashboard</span>
+        </button>
+        <button type="button" class="nav-item" data-page="agents">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.2 3.1-5 7-5s6.4 1.8 7 5"/><path d="M4 5h2M18 5h2"/></svg></span>
+          <span>Agents</span><span class="count">12</span>
+        </button>
+        <button type="button" class="nav-item" data-page="mcps">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="8" cy="7" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="11" cy="17" r="2"/></svg></span>
+          <span>MCP Servers</span><span class="count">—</span>
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <div>Connected sources</div>
+        <div class="footer-row"><span><i class="dot" style="color:var(--artifact-positive)"></i> AIC</span><span class="secondary">active</span></div>
+        <div class="footer-row"><span><i class="dot" style="color:var(--artifact-primary-brand)"></i> GitHub</span><span class="secondary">live</span></div>
+        <div class="footer-row"><span><i class="dot" style="color:var(--artifact-positive)"></i> Authorize</span><span class="secondary">active</span></div>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="crumb">
+          <span>Control plane</span>
+          <span class="crumb-sep">/</span>
+          <strong id="crumb-current">Dashboard</strong>
+        </div>
+        <div class="top-actions">
+          <button type="button" class="icon-button" aria-label="Search">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 5 5"/></svg>
+          </button>
+          <button type="button" class="icon-button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+          </button>
+          <div class="avatar">FC</div>
+        </div>
+      </header>
+
+      <main class="content">
+
+        <!-- ── Dashboard ─────────────────────────────────────────────────── -->
+        <section class="page active" id="page-dashboard">
+          <div class="page-head">
+            <div>
+              <div class="eyebrow">Overview / <span id="dashboard-date"></span></div>
+              <h1>Agentic access, at a glance.</h1>
+              <p class="subhead">A unified view across AIC, MCP Gateway, and PingAuthorize. Monitor who can do what, where, and why.</p>
+            </div>
+            <div class="page-head-right">
+              <button type="button" class="secondary-button" data-action="refresh">
+                <span class="button-icon">↻</span>Refresh sources
+              </button>
+            </div>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-top"><span>Agents</span><span class="info" tabindex="0" data-tip="Agent definitions discovered from AIC in the selected environment.">ⓘ</span></div>
+              <div class="kpi-value" id="kpi-agents-value">12</div>
+              <div class="kpi-meta positive">↑ 2 this month</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-top"><span>MCP servers</span><span class="info" tabindex="0" data-tip="MCP server routes defined in PingGateway and pulled from GitHub.">ⓘ</span></div>
+              <div class="kpi-value" id="kpi-mcps-value"><span class="spinner"></span></div>
+              <div class="kpi-meta positive">Live from GitHub</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-top"><span>MCP tools</span><span class="info" tabindex="0" data-tip="Total number of MCP tools covered by PingAuthorize tool policies, across all MCP servers.">ⓘ</span></div>
+              <div class="kpi-value" id="kpi-tools-value"><span class="spinner"></span></div>
+              <div class="kpi-meta">across all MCP servers</div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid" style="grid-template-columns:minmax(0,1fr) minmax(310px,.75fr);margin-bottom:12px">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <div class="panel-title">
+                    <h3>Coverage by agent</h3>
+                    <span class="info" tabindex="0" data-tip="Number of MCP servers each agent is authorised to access, derived from PingAuthorize Allowed Agents rules.">ⓘ</span>
+                  </div>
+                  <div class="panel-kicker">MCP servers per agent · source: PingAuthorize</div>
+                </div>
+                <div class="panel-actions" id="coverage-agent-count">—</div>
+              </div>
+              <div id="coverage-by-agent" class="bar-list" style="padding:14px 20px 6px">
+                <span class="spinner"></span>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <div class="panel-title"><h3>Policy coverage</h3></div>
+                  <div class="panel-kicker">MCP servers with authorised agents</div>
+                </div>
+              </div>
+              <div id="coverage-mcp-list" class="bar-list" style="padding:14px 20px 6px">
+                <span class="spinner"></span>
+              </div>
+            </section>
+          </div>
+
+          <section class="panel" style="margin-bottom:12px">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">
+                  <h3>Agent access map</h3>
+                  <span class="info" tabindex="0" data-tip="Each line represents a grant in the PingAuthorize Allow Actor Subject rule. Hover a node to highlight its connections. Click to open detail.">ⓘ</span>
+                </div>
+                <div class="panel-kicker">Agent → MCP server grants · source: PingAuthorize</div>
+              </div>
+            </div>
+            <div id="agent-mcp-graph" style="padding:8px 20px 20px;min-height:120px">
+              <span class="spinner"></span>
+            </div>
+          </section>
+
+          <div class="page-footer">
+            <span id="last-sync">—</span>
+            <span>3 sources connected · <span class="source-link" data-page-link="agents">Inspect integrations</span></span>
+          </div>
+        </section>
+
+        <!-- ── Agents ─────────────────────────────────────────────────────── -->
+        <section class="page" id="page-agents">
+          <div class="page-head">
+            <div>
+              <div class="eyebrow">Inventory / AIC</div>
+              <h1>Agents</h1>
+              <p class="subhead">Agent definitions, ownership, lifecycle state, and the scopes they present downstream.</p>
+            </div>
+            <div class="page-head-right">
+              <button type="button" class="secondary-button"><span class="button-icon">↗</span>Open AIC</button>
+            </div>
+          </div>
+
+          <div id="agents-list-state">
+            <div class="detail-grid">
+              <div class="detail-card"><div class="eyebrow">Total agents</div><div class="detail-value" id="agent-stat-total"><span class="spinner"></span></div><div class="detail-note" id="agent-stat-total-note">From AIC</div></div>
+              <div class="detail-card"><div class="eyebrow">Active agents</div><div class="detail-value" id="agent-stat-active"><span class="spinner"></span></div><div class="detail-note" id="agent-stat-active-note">Status: Active</div></div>
+              <div class="detail-card"><div class="eyebrow">Scopes issued</div><div class="detail-value" id="agent-stat-scopes"><span class="spinner"></span></div><div class="detail-note">Unique scopes across all agents</div></div>
+            </div>
+            <section class="panel">
+              <div class="panel-head">
+                <div><h3>Agent registry</h3><div class="panel-kicker">Source: Advanced Identity Cloud</div></div>
+                <div class="toolbar">
+                  <div class="search-wrap">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 5 5"/></svg>
+                    <input class="search" data-filter="agents" placeholder="Search agents" />
+                  </div>
+                  <button type="button" class="filter">All states⌄</button>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>AGENT</th><th>MCP SERVERS</th><th>STATUS</th></tr></thead>
+                  <tbody id="agents-tbody">
+                    <tr class="loading-row"><td colspan="3"><span class="spinner"></span> Loading agents from AIC…</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <section class="detail-view panel detail-hidden" data-glean-id="agent-detail-view">
+            <div class="detail-view-head">
+              <div>
+                <div class="eyebrow">Selected agent / access map</div>
+                <h2 id="agent-detail-title">Claims Assistant</h2>
+                <div id="agent-detail-subtitle" class="panel-kicker">agent-claims-01 · owned by Maria Rossi</div>
+              </div>
+              <div>
+                <span class="status allow"><i class="dot"></i>Active</span><br>
+                <button type="button" class="secondary-button back-button" data-back-detail="agents">← Back to agents</button>
+              </div>
+            </div>
+            <div class="detail-section-head">
+              <div><h3>MCP tool access</h3><div class="panel-kicker">MCP servers and tools this agent can invoke, derived from its AIC scopes.</div></div>
+              <span class="info" tabindex="0" data-tip="Scopes following mcp:server:tool are matched to Gateway routes and PingAuthorize policy sets.">ⓘ</span>
+            </div>
+            <div class="access-map" id="agent-access-map"></div>
+          </section>
+        </section>
+
+        <!-- ── MCP Servers ────────────────────────────────────────────────── -->
+        <section class="page" id="page-mcps">
+          <div class="page-head">
+            <div>
+              <div class="eyebrow">Runtime surface / MCP Gateway · GitHub</div>
+              <h1>MCP servers</h1>
+              <p class="subhead">Gateway routes pulled live from GitHub. Each route represents one MCP server with its filter chain and upstream target.</p>
+            </div>
+            <div class="page-head-right">
+              <button type="button" class="secondary-button" data-action="refresh"><span class="button-icon">↻</span>Sync from GitHub</button>
+              <button type="button" class="secondary-button"><span class="button-icon">↗</span>Open Gateway</button>
+            </div>
+          </div>
+
+          <div id="mcps-list-state">
+            <div class="detail-grid">
+              <div class="detail-card"><div class="eyebrow">Active routes</div><div class="detail-value" id="mcp-stat-active-value"><span class="spinner"></span></div><div class="detail-note">From GitHub config</div></div>
+              <div class="detail-card"><div class="eyebrow">Exposed tools</div><div class="detail-value">42</div><div class="detail-note">24 protected by policy</div></div>
+              <div class="detail-card"><div class="eyebrow">Audiences</div><div class="detail-value">6</div><div class="detail-note">2 shared across servers</div></div>
+            </div>
+            <section class="panel" id="mcps-list-view">
+              <div class="panel-head">
+                <div><h3>Gateway server registry</h3><div class="panel-kicker">Source: GitHub · PingGateway route files</div></div>
+                <div class="toolbar">
+                  <div class="search-wrap">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 5 5"/></svg>
+                    <input class="search" data-filter="mcps" placeholder="Search servers" />
+                  </div>
+                  <button type="button" class="filter">All statuses⌄</button>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>SERVER</th><th>PUBLIC URL</th><th>UPSTREAM</th><th>SCOPES</th><th>POLICIES</th><th>STATUS</th></tr></thead>
+                  <tbody id="mcps-tbody">
+                    <tr class="loading-row"><td colspan="7"><span class="spinner"></span> Loading MCP servers from GitHub…</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <section class="detail-view panel detail-hidden" data-glean-id="mcp-detail-view">
+            <div class="detail-view-head">
+              <div>
+                <div class="eyebrow">Selected MCP</div>
+                <h2 id="mcp-detail-title">—</h2>
+                <div id="mcp-detail-subtitle" class="panel-kicker">—</div>
+              </div>
+              <div>
+                <span class="status allow" id="mcp-detail-status"><i class="dot"></i>Healthy</span><br>
+                <button type="button" class="secondary-button back-button" data-back-detail="mcps">← Back to MCP servers</button>
+              </div>
+            </div>
+
+            <div class="tab-bar">
+              <button class="tab-btn active" data-tab="mcp-tab-policies">Policies</button>
+              <button class="tab-btn" data-tab="mcp-tab-route">Route Config</button>
+            </div>
+
+            <!-- Policies tab (default) -->
+            <div class="tab-panel" id="mcp-tab-policies">
+              <div id="mcp-policies-content" class="policy-loading">
+                <span class="spinner"></span>
+              </div>
+            </div>
+
+            <!-- Route Config tab -->
+            <div class="tab-panel tab-hidden" id="mcp-tab-route">
+              <div class="detail-section-head">
+                <div><h3>Filter chain</h3><div class="panel-kicker">Ordered filters applied to every request through this route.</div></div>
+                <span class="info" tabindex="0" data-tip="Filter chain is read from the PingGateway route JSON stored in GitHub.">ⓘ</span>
+              </div>
+              <div class="access-map" id="mcp-agent-map"></div>
+            </div>
+          </section>
+        </section>
+
+        <!-- ── Policies ───────────────────────────────────────────────────── -->
+        <section class="page" id="page-policies">
+          <div class="page-head">
+            <div>
+              <div class="eyebrow">Decision layer / PingAuthorize</div>
+              <h1>Policies</h1>
+              <p class="subhead">Authorization rules that bind agent scopes to MCP tools, audiences, attributes, and risk conditions.</p>
+            </div>
+            <div class="page-head-right">
+              <button type="button" class="secondary-button"><span class="button-icon">↗</span>Open Authorize</button>
+            </div>
+          </div>
+          <div class="detail-grid">
+            <div class="detail-card"><div class="eyebrow">Active policies</div><div class="detail-value">24</div><div class="detail-note">18 allow · 6 conditional</div></div>
+            <div class="detail-card"><div class="eyebrow">Protected tools</div><div class="detail-value">42</div><div class="detail-note">100% of production tools</div></div>
+          </div>
+          <section class="panel">
+            <div class="panel-head">
+              <div><h3>Authorization rule map</h3><div class="panel-kicker">Source: PingAuthorize policy decision logs and configuration</div></div>
+              <div class="toolbar">
+                <div class="search-wrap">
+                  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 5 5"/></svg>
+                  <input class="search" data-filter="policies" placeholder="Search policies or tools" />
+                </div>
+                <button type="button" class="filter">All decisions⌄</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>POLICY</th><th>AGENT SCOPE</th><th>TOOL</th><th>CONDITIONS</th><th>DECISION</th><th>UPDATED</th></tr></thead>
+                <tbody>
+                  <tr><td><div class="entity"><div class="entity-icon">⌘</div><div><div class="entity-name">claims-read-standard</div><div class="entity-sub mono">pol-7f31a</div></div></div></td><td><span class="scope">claims.read</span></td><td class="mono">get_claim_status</td><td class="secondary">tenant = agent.tenant</td><td><span class="status allow"><i class="dot"></i>Allow</span></td><td class="mono secondary">01 Aug</td></tr>
+                  <tr><td><div class="entity"><div class="entity-icon">⌘</div><div><div class="entity-name">travel-booking-step-up</div><div class="entity-sub mono">pol-91c8e</div></div></div></td><td><span class="scope">booking.write</span></td><td class="mono">book_flight</td><td class="secondary">risk &lt; medium · mfa = true</td><td><span class="status allow"><i class="dot"></i>Allow</span></td><td class="mono secondary">30 Jul</td></tr>
+                  <tr><td><div class="entity"><div class="entity-icon">⌘</div><div><div class="entity-name">finance-export-deny</div><div class="entity-sub mono">pol-4bd27</div></div></div></td><td><span class="scope">report.export</span></td><td class="mono">export_report</td><td class="secondary">device_trust = high</td><td><span class="status warn"><i class="dot"></i>Conditional</span></td><td class="mono secondary">29 Jul</td></tr>
+                  <tr><td><div class="entity"><div class="entity-icon">⌘</div><div><div class="entity-name">employee-data-boundary</div><div class="entity-sub mono">pol-a17d2</div></div></div></td><td><span class="scope">employee.read</span></td><td class="mono">get_employee</td><td class="secondary">region ∈ EU</td><td><span class="status allow"><i class="dot"></i>Allow</span></td><td class="mono secondary">28 Jul</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <!-- ── Access Logs ────────────────────────────────────────────────── -->
+        <section class="page" id="page-logs">
+          <div class="page-head">
+            <div>
+              <div class="eyebrow">Observability / MCP Gateway</div>
+              <h1>Access logs</h1>
+              <p class="subhead">Normalized gateway file events across agents, MCP servers, tools, and policy decisions.</p>
+            </div>
+          </div>
+          <div class="detail-grid">
+            <div class="detail-card"><div class="eyebrow">Events · 24h</div><div class="detail-value">1,842</div><div class="detail-note">+12.8% vs previous day</div></div>
+            <div class="detail-card"><div class="eyebrow">Allowed</div><div class="detail-value">1,827</div><div class="detail-note">99.2% of all events</div></div>
+            <div class="detail-card"><div class="eyebrow">Denied</div><div class="detail-value">15</div><div class="detail-note">9 from policy mismatch</div></div>
+          </div>
+          <section class="panel">
+            <div class="panel-head">
+              <div><h3>Gateway event stream</h3><div class="panel-kicker">Source: MCP Gateway access files · normalized view</div></div>
+              <div class="toolbar">
+                <div class="search-wrap">
+                  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 5 5"/></svg>
+                  <input class="search" data-filter="logs" placeholder="Search event stream" />
+                </div>
+                <button type="button" class="filter">Last 24 hours⌄</button>
+                <button type="button" class="filter">All decisions⌄</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>TIME</th><th>EVENT ID</th><th>AGENT</th><th>SERVER / TOOL</th><th>POLICY</th><th>DECISION</th><th>LATENCY</th></tr></thead>
+                <tbody>
+                  <tr><td class="mono secondary">14:31:42.208</td><td class="mono">evt_8bd71</td><td>Claims Assistant</td><td><div class="mono">claims-mcp</div><div class="mono secondary">get_claim_status</div></td><td class="mono secondary">pol-7f31a</td><td><span class="status allow"><i class="dot"></i>Allowed</span></td><td class="mono secondary">82 ms</td></tr>
+                  <tr><td class="mono secondary">14:31:38.917</td><td class="mono">evt_8bd70</td><td>Travel Concierge</td><td><div class="mono">travel-mcp</div><div class="mono secondary">book_flight</div></td><td class="mono secondary">pol-91c8e</td><td><span class="status allow"><i class="dot"></i>Allowed</span></td><td class="mono secondary">116 ms</td></tr>
+                  <tr><td class="mono secondary">14:30:59.483</td><td class="mono">evt_8bd6f</td><td>Finance Copilot</td><td><div class="mono">finance-mcp</div><div class="mono secondary">export_report</div></td><td class="mono secondary">pol-4bd27</td><td><span class="status warn"><i class="dot"></i>Denied</span></td><td class="mono secondary">44 ms</td></tr>
+                  <tr><td class="mono secondary">14:30:32.114</td><td class="mono">evt_8bd6e</td><td>Claims Assistant</td><td><div class="mono">claims-mcp</div><div class="mono secondary">update_claim</div></td><td class="mono secondary">pol-7f31a</td><td><span class="status allow"><i class="dot"></i>Allowed</span></td><td class="mono secondary">91 ms</td></tr>
+                  <tr><td class="mono secondary">14:29:17.041</td><td class="mono">evt_8bd6d</td><td>HR Advisor</td><td><div class="mono">people-mcp</div><div class="mono secondary">get_employee</div></td><td class="mono secondary">pol-a17d2</td><td><span class="status allow"><i class="dot"></i>Allowed</span></td><td class="mono secondary">63 ms</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Set live date in dashboard eyebrow
+    const d = new Date();
+    const el = document.getElementById('dashboard-date');
+    if (el) el.textContent = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' · ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' CET';
+  </script>
+  <script src="js/app.js"></script>
+</body>
+</html>

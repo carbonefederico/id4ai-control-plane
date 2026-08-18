@@ -1,0 +1,17 @@
+{
+  "name": "agentic-dashboard-api",
+  "version": "1.0.0",
+  "description": "Backend API for ID4AI Control Plane dashboard",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "dev": "node --env-file-if-exists=.env --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jose": "^5.0.0",
+    "node-fetch": "^3.3.2"
+  }
+}

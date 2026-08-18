@@ -1,0 +1,3 @@
+interface:
+  display_name: "ID4AI Add MCP"
+  short_description: "Discover an MCP server and publish a PingGateway route"

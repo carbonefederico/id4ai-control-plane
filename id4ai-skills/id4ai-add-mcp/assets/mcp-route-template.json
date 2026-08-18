@@ -1,0 +1,39 @@
+{
+  "name": "{{mcp_server_name}}",
+  "condition": "${find(request.uri.path, '^{{public_path}}')}",
+  "properties": {
+    "mcpServerUrl": "{{mcp_server_origin}}"
+  },
+  "baseURI": "&{mcpServerUrl}",
+  "handler": {
+    "type": "Chain",
+    "capture": "all",
+    "config": {
+      "filters": [
+        "McpAuditFilter",
+        "McpValidationFilter",
+        "MCPPingAuthorizeFilter",
+        {
+          "type": "UriPathRewriteFilter",
+          "config": {
+            "mappings": {
+              "{{public_path}}": "{{upstream_path}}"
+            }
+          }
+        },
+        {
+          "type": "HeaderFilter",
+          "config": {
+            "messageType": "REQUEST",
+            "replace": {
+              "host": [
+                "{{backend_host}}"
+              ]
+            }
+          }
+        }
+      ],
+      "handler": "ReverseProxyHandler"
+    }
+  }
+}
