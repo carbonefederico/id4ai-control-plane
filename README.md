@@ -78,17 +78,20 @@ graph TD
     end
 
     GH[(GitHub\nPingGateway route config)]
+    BizMCP[Business MCP Server]
 
     S1 & S2 -->|MCP protocol| MCP
     MCP -->|"Manage authorization policies (PAP API)"| PAZ
     MCP -->|"Manage agent identities (AM REST API)"| AIC
     MCP -->|"Publish gateway routes (Contents API)"| GH
+    MCP -->|"Discover tools (tools/list)"| BizMCP
     GH -->|CI/CD pipeline| PG
     BE -->|"Read policy sets & scopes"| PAZ
     BE -->|"Read agent identities"| AIC
     BE -->|"Read gateway routes"| GH
     FE -->|REST API| BE
     PG -->|"Request authorization decision"| PAZ
+    PG -->|"Proxy request"| BizMCP
 ```
 
 ---
@@ -116,6 +119,7 @@ sequenceDiagram
     participant Claude as Claude Code
     participant PGM as ping-gateway-manager
     participant PAZM as paz-manager
+    participant BizMCP as Business MCP Server
     participant AICM as aic-agent-manager
     participant GH as GitHub
     participant PAZ as PingAuthorize
@@ -127,7 +131,8 @@ sequenceDiagram
     PGM-->>Claude: Route published
 
     Claude->>PAZM: add_mcp(mcpName, mcpUrl, audience, userRole, agentId)
-    PAZM->>PAZM: tools/list → auto-discover tools
+    PAZM->>BizMCP: tools/list (discover available tools)
+    BizMCP-->>PAZM: Tool definitions
     PAZM->>PAZ: Create policy set + common policy + one policy per tool
     PAZM-->>Claude: Policies created (scopes list)
 
