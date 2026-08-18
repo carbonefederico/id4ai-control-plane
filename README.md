@@ -7,10 +7,10 @@ The ID4AI Control Plane is a purpose-built system for automating the lifecycle m
 The following videos demonstrate the `id4ai-add-mcp` and `id4ai-add-agent` skills in action — from onboarding an MCP server and defining its authorization policies, to creating an agent identity and granting it access to tools, with the results reflected live in the dashboard.
 
 **`/id4ai-add-mcp` — publish a PingGateway route and create authorization policies for an MCP server:**
-<video src="media/add_mcp_skill.mp4" controls width="100%"></video>
+<video src="https://github.com/user-attachments/assets/4805821c-c9ce-4f0a-9b95-9b347cdd5bbf" controls width="100%"></video>
 
 **`/id4ai-add-agent` — create an agent identity in AIC and authorize it on selected MCP tools:**
-<video src="media/add_agent_identity_skill.mp4" controls width="100%"></video>
+<video src="https://github.com/user-attachments/assets/217abc62-5fa8-4034-a2bd-69cb283696bb" controls width="100%"></video>
 
 ---
 
