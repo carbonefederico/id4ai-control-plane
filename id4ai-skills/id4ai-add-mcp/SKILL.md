@@ -11,20 +11,34 @@ Onboard an MCP server end-to-end: publish the PingGateway route, discover the se
 
 ### Phase 1 — main inputs
 
-Ask for only what cannot be derived — in a single prompt:
+Derive as much as possible from the MCP URL before asking anything:
 
-- `mcp_server_name`: short stable identifier, for example `crm`.
-- `mcp_url`: complete MCP endpoint URL, including its MCP path.
-- `public_path`: PingGateway path exposed to clients.
-- `user_role`: the role that will be required in the user's (subject) token to access this MCP — for example `FinancialAdvisor`. This becomes a claim-based permission check in the authorization policy.
+- `mcp_url`: the URL provided by the user (already known).
+- `mcp_server_name`: derive from the last non-empty path segment of `mcp_url` (e.g. `https://host/mcp/products` → `products`).
+- `public_path`: derive as the full path portion of `mcp_url` (e.g. `https://host/mcp/products` → `/mcp/products`).
+- `user_role`: cannot be derived — ask the user. Explain it is the role required in the user's (subject) token, and becomes a claim-based permission check in the authorization policy.
+
+Present the derived values alongside the `user_role` question in a **single confirmation prompt**, for example:
+
+> I'll set up this MCP with:
+> - **Name:** `products`
+> - **Public path:** `/mcp/products`
+> - **MCP URL:** `https://demo-mcp-ten.vercel.app/mcp/products`
+>
+> What **user role** should be required to access it? (e.g. `ProductManager`)
+> Confirm the above or correct anything.
+
+Do not ask for `mcp_server_name` or `public_path` as open questions — only surface them for correction.
 
 ### Phase 2 — agent connection
 
-After phase 1, call `list_agents` on `aic-agent-manager` silently. Then ask in a single follow-up prompt:
+After phase 1, attempt to call `list_agents` on `aic-agent-manager` silently. This call is **non-fatal** — if it fails for any reason, continue without it and omit option a from the prompt below.
+
+Then ask in a single follow-up prompt:
 
 > "Which agent should be authorized to call this MCP?"
 >
-> **a) Existing agent** — show the IDs returned by `list_agents` for the user to pick one.
+> **a) Existing agent** — (only if `list_agents` succeeded) show the IDs for the user to pick one.
 > **b) Create a new agent** — ask for the desired agent ID; the agent will be created after the MCP is set up.
 > **c) Skip for now** — no agent connected yet.
 
@@ -39,7 +53,7 @@ Resolve `agent_id` from the user's answer:
 
 - Collect phase 1 inputs in a **single upfront prompt**. Collect phase 2 (agent selection) in one follow-up prompt after calling `list_agents`. Do not ask for anything else mid-workflow.
 - After all inputs are confirmed, **run all steps to completion without pausing or asking for confirmation**.
-- If a required MCP tool is unavailable, **stop immediately and report the error clearly** — do not skip or work around it.
+- If a **required** MCP tool is unavailable (`add_mcp_route`, `add_mcp`), stop immediately and report the error clearly — do not skip or work around it. Optional calls (`list_agents`) may fail silently.
 
 ## Workflow
 
