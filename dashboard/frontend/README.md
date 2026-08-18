@@ -1,6 +1,6 @@
-# Frontend — Dashboard
+# Dashboard — Frontend
 
-Single-page application (vanilla HTML/CSS/JS, no build step) served by the backend at `http://localhost:3001`. Provides a live view of AI agent identities, protected MCP servers, authorization policies, and the access topology between them.
+Single-page application (vanilla HTML/CSS/JS, no build step) served by the backend at `http://localhost:3033`. Provides a live view of AI agent identities, protected MCP servers, authorization policies, and the access topology between them.
 
 Files: `index.html`, `js/app.js`, `css/styles.css`
 

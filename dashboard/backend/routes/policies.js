@@ -3,26 +3,22 @@ import fetch from 'node-fetch';
 
 function cfg() {
   return {
-    baseUrl:  process.env.PAZ_BASE_URL  || 'https://localhost:9443',
-    branch:   process.env.PAZ_BRANCH    || '',
-    username: process.env.PAZ_USERNAME  || '',
-    password: process.env.PAZ_PASSWORD  || '',
-    userId:   process.env.PAZ_USER_ID   || 'admin',
+    baseUrl: process.env.PAZ_BASE_URL || 'https://localhost:9443',
+    branch:  process.env.PAZ_BRANCH   || '',
+    userId:  process.env.PAZ_USER_ID  || 'admin',
   };
 }
 
 const insecureAgent = new https.Agent({ rejectUnauthorized: false });
 
-function pazHeaders(username, password, userId) {
-  const h = { Accept: 'application/json', 'X-User-ID': userId };
-  if (username) h['Authorization'] = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
-  return h;
+function pazHeaders(userId) {
+  return { Accept: 'application/json', 'X-User-ID': userId };
 }
 
 async function pazGet(url) {
-  const { username, password, userId } = cfg();
+  const { userId } = cfg();
   console.log(`[paz] GET ${url} (X-User-ID: ${userId})`);
-  const res = await fetch(url, { headers: pazHeaders(username, password, userId), agent: insecureAgent });
+  const res = await fetch(url, { headers: pazHeaders(userId), agent: insecureAgent });
   const body = await res.text();
   console.log(`[paz] ${res.status} ${res.statusText}`);
   if (!res.ok) {

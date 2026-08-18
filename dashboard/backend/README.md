@@ -1,6 +1,6 @@
-# Backend — Dashboard API Server
+# Dashboard — Backend
 
-Express API server (port `3001`) that serves the frontend SPA and exposes REST endpoints backed by live data from AIC, PingAuthorize, and GitHub.
+Express API server (port `3033`) that serves the frontend SPA and exposes REST endpoints backed by live data from AIC, PingAuthorize, and GitHub.
 
 Entry point: `server.js`
 
@@ -27,7 +27,7 @@ Entry point: `server.js`
 
 | Variable | Description |
 |----------|-------------|
-| `PORT` | HTTP port (default: `3001`) |
+| `PORT` | HTTP port (default: `3033`) |
 | `AIC_HOST` | AIC tenant hostname |
 | `AIC_SERVICE_ACCOUNT_ID` | Service account client ID |
 | `AIC_JWK_PATH` | Path to RS256 JWK private key |
@@ -35,7 +35,6 @@ Entry point: `server.js`
 | `AIC_SCOPES` | Scopes for service account token |
 | `PAZ_BASE_URL` | PingAuthorize base URL |
 | `PAZ_BRANCH` | PAZ policy branch UUID |
-| `PAZ_USERNAME` / `PAZ_PASSWORD` | PAZ basic auth |
 | `PAZ_USER_ID` | `X-User-ID` header for PAZ |
 | `GITHUB_OWNER` / `GITHUB_REPO` | GitHub repository for route files |
 | `GITHUB_PATH` | Path inside repo (default: `config/routes`) |
@@ -48,8 +47,7 @@ Entry point: `server.js`
 ## Running
 
 ```bash
-npm install
-node server.js
+npm install && npm run dev
 ```
 
-The backend also serves the `../frontend` directory at `/`, so opening `http://localhost:3001` loads the dashboard.
+`npm run dev` loads `.env` automatically. The backend also serves `../frontend` at `/`, so opening `http://localhost:3033` loads the dashboard.

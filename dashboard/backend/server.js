@@ -9,7 +9,7 @@ import { getAgents } from './routes/agents.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3033;
 
 app.use(cors());
 app.use(express.json());

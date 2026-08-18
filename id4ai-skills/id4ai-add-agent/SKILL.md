@@ -29,13 +29,25 @@ Do not ask about AIC creation. Do not ask for anything else upfront.
 
 Call `list_mcps` on the `paz-manager` MCP (native Claude tool). Show the returned list to the user and ask which MCPs this agent should have access to. The user may select one or more.
 
-### 2. Fetch scopes for selected MCPs
+### 2. Fetch scopes and select access level for each MCP
 
-For each selected MCP, call `get_mcp_scopes` on the `paz-manager` MCP:
+For each selected MCP:
 
-- `mcpName`: `<selected mcp name>`
+1. Call `get_mcp_scopes` on the `paz-manager` MCP:
+   - `mcpName`: `<selected mcp name>`
 
-Collect all returned scopes across all selected MCPs into a single flat list.
+2. Ask the user:
+
+   > "For **\<mcpName\>**, do you want to grant full access or select individual tools?"
+   >
+   > **a) Full access** — grant all scopes.
+   > **b) Individual tools** — show the scope list and let the user pick.
+
+3. Resolve the granted scopes:
+   - Option a: use all returned scopes.
+   - Option b: display the scopes (one per line), ask the user to select, and use only those selected.
+
+Collect the granted scopes across all selected MCPs into a single flat list.
 
 ### 3. Authorize agent on selected MCPs
 

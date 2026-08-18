@@ -7,6 +7,20 @@ Transport: `StreamableHTTPServerTransport` (stateless per request)
 
 ---
 
+## Register with Claude Code
+
+After the server is running, add all three MCPs to your global Claude Code config once:
+
+```bash
+claude mcp add paz-manager          http://localhost:3034/ping-authorize/mcp       --transport http
+claude mcp add aic-agent-manager    http://localhost:3034/aic-agent-manager/mcp    --transport http
+claude mcp add ping-gateway-manager http://localhost:3034/ping-gateway-manager/mcp --transport http
+```
+
+Verify with `claude mcp list`. The tools from all three servers will then be available in every Claude Code session.
+
+---
+
 ## paz-manager → `/ping-authorize/mcp`
 
 Manages PingAuthorize authorization policies for MCP servers. Every onboarded MCP server gets its own policy set under the `MCP` root, with one policy per tool plus a shared `common` policy that controls agent-level access.

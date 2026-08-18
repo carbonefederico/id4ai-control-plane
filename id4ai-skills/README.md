@@ -4,6 +4,20 @@ Two Claude Code skills that implement the primary automation workflows. Each ski
 
 ---
 
+## Installation
+
+Install both skills globally so they are available in every Claude Code session:
+
+```bash
+# Run from the repo root
+ln -s "$(pwd)/id4ai-skills/id4ai-add-mcp"   ~/.claude/skills/id4ai-add-mcp
+ln -s "$(pwd)/id4ai-skills/id4ai-add-agent"  ~/.claude/skills/id4ai-add-agent
+```
+
+Once linked, invoke them with `/id4ai-add-mcp` and `/id4ai-add-agent` in any Claude Code session. The MCP servers (`paz-manager`, `aic-agent-manager`, `ping-gateway-manager`) must be running and registered with Claude Code for the skills to work — see [mcp-server/README.md](../mcp-server/README.md).
+
+---
+
 ## id4ai-add-mcp
 
 **Slash command:** `/id4ai-add-mcp`  
