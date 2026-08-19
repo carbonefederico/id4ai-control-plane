@@ -4,8 +4,9 @@ import { importJWK, SignJWT } from 'jose';
 
 function aicCfg() {
   return {
-    host:             process.env.AIC_HOST              || '',
+    host:             process.env.AIC_HOST               || '',
     serviceAccountId: process.env.AIC_SERVICE_ACCOUNT_ID || '',
+    jwk:              process.env.AIC_JWK                || null,
     jwkPath:          process.env.AIC_JWK_PATH           || './aic-privateKey.jwk',
     scopes:           process.env.AIC_SCOPES             || 'fr:am:* fr:idm:*',
     realm:            process.env.AIC_REALM              || '/realms/root/realms/alpha',
@@ -18,10 +19,10 @@ let _tokenExpiry = 0;
 async function getAicToken() {
   if (_tokenCache && Date.now() < _tokenExpiry) return _tokenCache;
 
-  const { host, serviceAccountId, jwkPath, scopes } = aicCfg();
+  const { host, serviceAccountId, jwk: jwkEnv, jwkPath, scopes } = aicCfg();
   const tokenEndpoint = `https://${host}/am/oauth2/access_token`;
 
-  const jwk        = JSON.parse(readFileSync(jwkPath, 'utf8'));
+  const jwk        = jwkEnv ? JSON.parse(jwkEnv) : JSON.parse(readFileSync(jwkPath, 'utf8'));
   const privateKey = await importJWK(jwk, 'RS256');
 
   const now       = Math.floor(Date.now() / 1000);
