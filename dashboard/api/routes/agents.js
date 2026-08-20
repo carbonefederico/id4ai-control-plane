@@ -64,34 +64,38 @@ function normalizeAgent(a) {
   };
 }
 
-export async function getAgents(_req, res) {
+export async function fetchAgents() {
   const { host, realm } = aicCfg();
 
   if (!host) {
     console.warn('[agents] AIC_HOST not configured — returning empty list');
-    return res.json([]);
+    return [];
   }
 
+  const token = await getAicToken();
+  const url   = `https://${host}/am/json${realm}/realm-config/agents/AIAgent?_queryFilter=true`;
+  console.log(`[agents] GET ${url}`);
+
+  const r = await fetch(url, {
+    headers: {
+      'Accept-API-Version': 'resource=2.0',
+      'Authorization':      `Bearer ${token}`,
+    },
+  });
+
+  if (!r.ok) {
+    const body = await r.text();
+    throw new Error(`AIC agents API HTTP ${r.status}: ${body.slice(0, 200)}`);
+  }
+
+  const { result } = await r.json();
+  console.log(`[agents] returning ${result.length} agents`);
+  return result.map(normalizeAgent);
+}
+
+export async function getAgents(_req, res) {
   try {
-    const token = await getAicToken();
-    const url   = `https://${host}/am/json${realm}/realm-config/agents/AIAgent?_queryFilter=true`;
-    console.log(`[agents] GET ${url}`);
-
-    const r = await fetch(url, {
-      headers: {
-        'Accept-API-Version': 'resource=2.0',
-        'Authorization':      `Bearer ${token}`,
-      },
-    });
-
-    if (!r.ok) {
-      const body = await r.text();
-      throw new Error(`AIC agents API HTTP ${r.status}: ${body.slice(0, 200)}`);
-    }
-
-    const { result } = await r.json();
-    console.log(`[agents] returning ${result.length} agents`);
-    res.json(result.map(normalizeAgent));
+    res.json(await fetchAgents());
   } catch (e) {
     console.error('[agents] error:', e.message);
     res.status(502).json({ error: e.message });

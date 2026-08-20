@@ -201,14 +201,17 @@ All three must pass. Failing any one denies the request.
 ```
 id4ai-control-plane/
 ├── mcp-server/          # Three MCP servers (paz-manager, aic-agent-manager, ping-gateway-manager)
-├── dashboard/
-│   ├── backend/         # Express API that powers the dashboard
-│   └── frontend/        # Single-page dashboard UI (vanilla JS)
+├── dashboard/           # Single Vercel-ready dashboard project
+│   ├── api/              # Express API and service integrations
+│   ├── public/           # Single-page dashboard UI (vanilla JS)
+│   └── dev.js            # Local dashboard launcher
 ├── id4ai-skills/        # Claude Code skills for the two primary workflows
 └── scripts/             # Standalone CLI utilities for AIC agent management
 ```
 
 For further details, see each subfolder's README below.
+
+The dashboard is a standalone Vercel project: set its Vercel Root Directory to `dashboard`.
 
 ---
 
@@ -217,8 +220,7 @@ For further details, see each subfolder's README below.
 | Folder | Description |
 |--------|-------------|
 | [mcp-server/](mcp-server/README.md) | The three MCP servers that Claude Code uses to automate configuration |
-| [dashboard/backend/](dashboard/backend/README.md) | REST API serving the dashboard with live data from AIC, PAZ, and GitHub |
-| [dashboard/frontend/](dashboard/frontend/README.md) | Single-page dashboard: agent topology, MCP inventory, policy viewer |
+| [dashboard/](dashboard/README.md) | Single Vercel-ready dashboard with an Express API and static UI |
 | [id4ai-skills/](id4ai-skills/README.md) | `id4ai-add-mcp` and `id4ai-add-agent` Claude Code skills |
 | [scripts/](scripts/README.md) | CLI scripts for direct AIC agent management |
 
@@ -243,8 +245,8 @@ git clone https://github.com/carbonefederico/id4ai-control-plane.git
 cd id4ai-control-plane
 
 # Fill in environment variables for each service
-cp mcp-server/.env.example        mcp-server/.env              && vi mcp-server/.env
-cp dashboard/backend/.env.example dashboard/backend/.env       && vi dashboard/backend/.env
+cp mcp-server/.env.example mcp-server/.env && vi mcp-server/.env
+cp dashboard/.env.example  dashboard/.env  && vi dashboard/.env
 ```
 
 ---
@@ -258,7 +260,7 @@ Each subfolder has its own `package.json`. Run in two separate terminals:
 cd mcp-server && npm install && npm run dev
 
 # Dashboard (port 3033)
-cd dashboard/backend && npm install && npm run dev
+cd dashboard && npm install && npm run dev
 # Open http://localhost:3033
 ```
 

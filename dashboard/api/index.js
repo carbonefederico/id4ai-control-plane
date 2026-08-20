@@ -2,20 +2,18 @@ import express from 'express';
 import cors from 'cors';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { getMcps, getMcpById, getCachedMcps, warmMcpCache } from './routes/mcps.js';
+import { getMcps, getMcpById, getMcpsData } from './routes/mcps.js';
 import { getMcpPolicySets, getMcpPolicySummary, getPolicySetDependencies } from './routes/policies.js';
-import { getAgents } from './routes/agents.js';
+import { fetchAgents, getAgents } from './routes/agents.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
-const PORT = process.env.PORT || 3033;
-
 app.use(cors());
 app.use(express.json());
 
-// Serve the frontend from ../frontend
-app.use(express.static(join(__dirname, '..', 'frontend')));
+// Serve the dashboard UI from ../public
+app.use(express.static(join(__dirname, '..', 'public')));
 
 // ── Health ────────────────────────────────────────────────────────────────────
 app.get('/health', (_req, res) => res.json({ status: 'ok', ts: new Date().toISOString() }));
@@ -31,12 +29,11 @@ app.get('/api/mcps/:id', getMcpById);
 // Agents, policies, and events are stubbed — wire up AIC / Authorize / log files here.
 app.get('/api/summary', async (_req, res) => {
   try {
-    const mcps = getCachedMcps();
+    const mcps = await getMcpsData();
     // Fetch live agent count from AIC (non-blocking — falls back to null on error)
     let agentCount = null;
     try {
-      const aicRes = await fetch(`http://localhost:${PORT}/api/agents`);
-      if (aicRes.ok) agentCount = (await aicRes.json()).length;
+      agentCount = (await fetchAgents()).length;
     } catch { /* AIC not configured */ }
 
     res.json({
@@ -82,9 +79,4 @@ app.get('/api/logs', (_req, res) => {
   ]);
 });
 
-app.listen(PORT, () => {
-  console.log(`ID4AI API running on http://localhost:${PORT}`);
-  console.log(`  GitHub source: ${process.env.GITHUB_OWNER || 'your-org'}/${process.env.GITHUB_REPO || 'your-gateway-repo'} @ ${process.env.GITHUB_PATH || 'config/routes'}`);
-  console.log(`  Set GITHUB_OWNER, GITHUB_REPO, GITHUB_PATH env vars to point at your repo.`);
-  warmMcpCache();
-});
+export default app;
