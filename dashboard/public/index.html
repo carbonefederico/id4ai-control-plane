@@ -45,12 +45,6 @@
           <strong id="crumb-current">Dashboard</strong>
         </div>
         <div class="top-actions">
-          <button type="button" class="icon-button" aria-label="Search">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 5 5"/></svg>
-          </button>
-          <button type="button" class="icon-button" aria-label="Notifications">
-            <svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
-          </button>
           <div class="avatar">FC</div>
         </div>
       </header>
@@ -149,9 +143,6 @@
               <h1>Agents</h1>
               <p class="subhead">Agent definitions, ownership, lifecycle state, and the scopes they present downstream.</p>
             </div>
-            <div class="page-head-right">
-              <button type="button" class="secondary-button"><span class="button-icon">↗</span>Open AIC</button>
-            </div>
           </div>
 
           <div id="agents-list-state">
@@ -212,7 +203,6 @@
             </div>
             <div class="page-head-right">
               <button type="button" class="secondary-button" data-action="refresh"><span class="button-icon">↻</span>Sync from GitHub</button>
-              <button type="button" class="secondary-button"><span class="button-icon">↗</span>Open Gateway</button>
             </div>
           </div>
 
@@ -276,47 +266,6 @@
                 <span class="info" tabindex="0" data-tip="Filter chain is read from the PingGateway route JSON stored in GitHub.">ⓘ</span>
               </div>
               <div class="access-map" id="mcp-agent-map"></div>
-            </div>
-          </section>
-        </section>
-
-        <!-- ── Policies ───────────────────────────────────────────────────── -->
-        <section class="page" id="page-policies">
-          <div class="page-head">
-            <div>
-              <div class="eyebrow">Decision layer / PingAuthorize</div>
-              <h1>Policies</h1>
-              <p class="subhead">Authorization rules that bind agent scopes to MCP tools, audiences, attributes, and risk conditions.</p>
-            </div>
-            <div class="page-head-right">
-              <button type="button" class="secondary-button"><span class="button-icon">↗</span>Open Authorize</button>
-            </div>
-          </div>
-          <div class="detail-grid">
-            <div class="detail-card"><div class="eyebrow">Active policies</div><div class="detail-value">24</div><div class="detail-note">18 allow · 6 conditional</div></div>
-            <div class="detail-card"><div class="eyebrow">Protected tools</div><div class="detail-value">42</div><div class="detail-note">100% of production tools</div></div>
-          </div>
-          <section class="panel">
-            <div class="panel-head">
-              <div><h3>Authorization rule map</h3><div class="panel-kicker">Source: PingAuthorize policy decision logs and configuration</div></div>
-              <div class="toolbar">
-                <div class="search-wrap">
-                  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 5 5"/></svg>
-                  <input class="search" data-filter="policies" placeholder="Search policies or tools" />
-                </div>
-                <button type="button" class="filter">All decisions⌄</button>
-              </div>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>POLICY</th><th>AGENT SCOPE</th><th>TOOL</th><th>CONDITIONS</th><th>DECISION</th><th>UPDATED</th></tr></thead>
-                <tbody>
-                  <tr><td><div class="entity"><div class="entity-icon">⌘</div><div><div class="entity-name">claims-read-standard</div><div class="entity-sub mono">pol-7f31a</div></div></div></td><td><span class="scope">claims.read</span></td><td class="mono">get_claim_status</td><td class="secondary">tenant = agent.tenant</td><td><span class="status allow"><i class="dot"></i>Allow</span></td><td class="mono secondary">01 Aug</td></tr>
-                  <tr><td><div class="entity"><div class="entity-icon">⌘</div><div><div class="entity-name">travel-booking-step-up</div><div class="entity-sub mono">pol-91c8e</div></div></div></td><td><span class="scope">booking.write</span></td><td class="mono">book_flight</td><td class="secondary">risk &lt; medium · mfa = true</td><td><span class="status allow"><i class="dot"></i>Allow</span></td><td class="mono secondary">30 Jul</td></tr>
-                  <tr><td><div class="entity"><div class="entity-icon">⌘</div><div><div class="entity-name">finance-export-deny</div><div class="entity-sub mono">pol-4bd27</div></div></div></td><td><span class="scope">report.export</span></td><td class="mono">export_report</td><td class="secondary">device_trust = high</td><td><span class="status warn"><i class="dot"></i>Conditional</span></td><td class="mono secondary">29 Jul</td></tr>
-                  <tr><td><div class="entity"><div class="entity-icon">⌘</div><div><div class="entity-name">employee-data-boundary</div><div class="entity-sub mono">pol-a17d2</div></div></div></td><td><span class="scope">employee.read</span></td><td class="mono">get_employee</td><td class="secondary">region ∈ EU</td><td><span class="status allow"><i class="dot"></i>Allow</span></td><td class="mono secondary">28 Jul</td></tr>
-                </tbody>
-              </table>
             </div>
           </section>
         </section>
