@@ -8,8 +8,8 @@
   },
   "type": "module",
   "scripts": {
-    "start": "node --env-file-if-exists=.env server.js",
-    "dev": "node --env-file-if-exists=.env --watch server.js"
+    "start": "node --env-file-if-exists=.env dev.js",
+    "dev": "node --env-file-if-exists=.env --watch dev.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
