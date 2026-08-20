@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve the dashboard UI from public
-app.use(express.static(join(__dirname, 'public')));
+app.use(express.static(join(__dirname, '..', 'public')));
 
 // ── Health ────────────────────────────────────────────────────────────────────
 app.get('/health', (_req, res) => res.json({ status: 'ok', ts: new Date().toISOString() }));
@@ -77,15 +77,6 @@ app.get('/api/logs', (_req, res) => {
     { id: 'evt_8bd6e', time: '14:30:32.114', agent: 'Claims Assistant', server: 'claims-mcp', tool: 'update_claim', policy: 'pol-7f31a', decision: 'allowed', latencyMs: 91 },
     { id: 'evt_8bd6d', time: '14:29:17.041', agent: 'HR Advisor', server: 'people-mcp', tool: 'get_employee', policy: 'pol-a17d2', decision: 'allowed', latencyMs: 63 },
   ]);
-});
-
-const PORT = Number(process.env.PORT) || 3033;
-const environment = process.env.NODE_ENV || 'development';
-
-app.listen(PORT, () => {
-  console.log(`ID4AI dashboard running on http://localhost:${PORT} (${environment})`);
-  console.log(`  GitHub source: ${process.env.GITHUB_OWNER || 'your-org'}/${process.env.GITHUB_REPO || 'your-gateway-repo'} @ ${process.env.GITHUB_PATH || 'config/routes'}`);
-  console.log('  Set GITHUB_OWNER, GITHUB_REPO, GITHUB_PATH env vars to point at your repo.');
 });
 
 export default app;
