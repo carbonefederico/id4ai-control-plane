@@ -4,10 +4,9 @@ A single Express application that serves the dashboard UI and its REST API. The 
 
 ## Layout
 
-- `api/index.js` — Express application and Vercel function entry point
+- `server.js` — Express application, Vercel server entry point, and local launcher
 - `api/routes/` — AIC, GitHub, and PingAuthorize integrations
 - `public/` — static dashboard assets
-- `dev.js` — local development launcher
 
 The browser uses same-origin `/api/...` requests in both environments.
 
@@ -55,7 +54,7 @@ Required integrations use:
 
 Create one Vercel project for this repository and set its **Root Directory** to `dashboard`.
 
-Vercel will use `api/index.js` for the API function and serve files under `public/` as static assets. No frontend build command is required. Configure the environment variables above in the Vercel project settings for the appropriate Production, Preview, and Development environments.
+Vercel will use `server.js` for the Express server function and serve files under `public/` as static assets. No frontend build command is required. Configure the environment variables above in the Vercel project settings for the appropriate Production, Preview, and Development environments.
 
 Verify after deployment:
 
