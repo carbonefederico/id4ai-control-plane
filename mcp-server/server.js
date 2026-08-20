@@ -4,7 +4,6 @@ import { z } from 'zod';
 import express from 'express';
 import https from 'node:https';
 import fetch from 'node-fetch';
-import { readFileSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { importJWK, SignJWT } from 'jose';
 
@@ -25,7 +24,7 @@ const ATTR = {
 
 function pazCfg() {
   return {
-    baseUrl: process.env.PAZ_BASE_URL || 'https://localhost:9443',
+    baseUrl: (process.env.PAZ_BASE_URL || 'https://localhost:9443').replace(/\/+$/, ''),
     branch:  process.env.PAZ_BRANCH   || '',
     userId:  process.env.PAZ_USER_ID  || 'admin',
   };
@@ -671,8 +670,6 @@ function aicCfg() {
   return {
     host:             process.env.AIC_HOST               || '',
     serviceAccountId: process.env.AIC_SERVICE_ACCOUNT_ID || '',
-    jwk:              process.env.AIC_JWK                || null,
-    jwkPath:          process.env.AIC_JWK_PATH           || './aic-privateKey.jwk',
     scopes:           process.env.AIC_SCOPES             || 'fr:am:* fr:idm:*',
     realm:            process.env.AIC_REALM              || '/realms/root/realms/alpha',
   };
@@ -684,10 +681,10 @@ let _aicTokenExpiry = 0;
 async function getAicToken() {
   if (_aicTokenCache && Date.now() < _aicTokenExpiry) return _aicTokenCache;
 
-  const { host, serviceAccountId, jwk: jwkEnv, jwkPath, scopes } = aicCfg();
+  const { host, serviceAccountId, scopes } = aicCfg();
   const tokenEndpoint = `https://${host}/am/oauth2/access_token`;
 
-  const jwk        = jwkEnv ? JSON.parse(jwkEnv) : JSON.parse(readFileSync(jwkPath, 'utf8'));
+  const jwk        = JSON.parse(process.env.AIC_JWK);
   const privateKey = await importJWK(jwk, 'RS256');
   const now        = Math.floor(Date.now() / 1000);
 

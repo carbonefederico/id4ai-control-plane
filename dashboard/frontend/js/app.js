@@ -109,8 +109,9 @@ function renderCoverageByAgent(agents, pazSummary) {
 function renderCoverageMcpList(agents, pazSummary) {
   const el = document.getElementById('coverage-mcp-list');
   if (!el) return;
+  const agentIds = new Set(agents.map(a => a.id));
   const entries = Object.entries(pazSummary)
-    .map(([name, info]) => ({ name, agentCount: (info.agentSubjects || []).length }))
+    .map(([name, info]) => ({ name, agentCount: (info.agentSubjects || []).filter(id => agentIds.has(id)).length }))
     .sort((a, b) => b.agentCount - a.agentCount);
   if (!entries.length) { el.innerHTML = '<div class="empty-state" style="padding:20px"><strong>No MCP policy sets</strong></div>'; return; }
   const max = Math.max(...entries.map(e => e.agentCount), 1);

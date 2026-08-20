@@ -1,22 +1,19 @@
-import { readFileSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { importJWK, SignJWT } from 'jose';
 
 const host             = process.env.AIC_HOST;
 const serviceAccountId = process.env.SERVICE_ACCOUNT_ID;
-const jwkPath          = process.env.JWK_PATH          || './privateKey.jwk';
-const scopes           = process.env.SCOPES             || 'fr:am:* fr:idm:*';
-const realm            = process.env.REALM              || '/realms/root/realms/alpha';
+const scopes           = process.env.SCOPES || 'fr:am:* fr:idm:*';
+const realm            = process.env.REALM  || '/realms/root/realms/alpha';
 
-if (!host || !serviceAccountId) {
-  console.error('Missing required env vars: AIC_HOST, SERVICE_ACCOUNT_ID');
+if (!host || !serviceAccountId || !process.env.AIC_JWK) {
+  console.error('Missing required env vars: AIC_HOST, SERVICE_ACCOUNT_ID, AIC_JWK');
   process.exit(1);
 }
 
 const tokenEndpoint = `https://${host}/am/oauth2/access_token`;
 
-// Load private key from JWK file
-const jwk        = JSON.parse(readFileSync(jwkPath, 'utf8'));
+const jwk        = JSON.parse(process.env.AIC_JWK);
 const privateKey = await importJWK(jwk, 'RS256');
 
 // Build and sign the JWT assertion (180-second expiry matches the curl example)

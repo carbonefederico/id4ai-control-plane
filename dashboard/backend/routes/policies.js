@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 
 function cfg() {
   return {
-    baseUrl: process.env.PAZ_BASE_URL || 'https://localhost:9443',
+    baseUrl: (process.env.PAZ_BASE_URL || 'https://localhost:9443').replace(/\/+$/, ''),
     branch:  process.env.PAZ_BRANCH   || '',
     userId:  process.env.PAZ_USER_ID  || 'admin',
   };
