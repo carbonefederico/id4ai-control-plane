@@ -140,13 +140,19 @@ export function getCachedMcps() {
   return _cache ?? [];
 }
 
+// Cache is an optimization only: load the source when a function instance is cold.
+export async function getMcpsData(force = false) {
+  return fetchAndCacheMcps(force);
+}
+
 export async function getMcpById(req, res) {
   const { id } = req.params;
   try {
-    const mcp = (_cache ?? []).find(m => m.id === id);
+    const mcps = await getMcpsData();
+    const mcp = mcps.find(m => m.id === id);
     if (!mcp) return res.status(404).json({ error: 'Not found' });
     res.json(mcp);
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    res.status(502).json({ error: e.message });
   }
 }
